@@ -1,11 +1,46 @@
-#define TRIG_PIN 5
-#define ECHO_PIN 18
-#define BIN_HEIGHT_CM 30.0  // Height of bin in cm
+#include <SPI.h>
+#include <LoRa.h>
+
+#define TRIG_PIN 26
+#define ECHO_PIN 27
+#define BIN_HEIGHT_CM 27
+
+#define ss 5
+#define rst 14
+#define dio0 2
+
+String Message = "";
+String DeviceID = "Bin 01";
+byte LocalAddress = 0x02;
+byte Destination_Master = 0x01;
+
+void sendMessage(String Outgoing, byte Destination) {
+  LoRa.beginPacket();
+  LoRa.write(Destination);
+  LoRa.write(LocalAddress);
+  LoRa.write(Outgoing.length());
+  LoRa.print(Outgoing);
+  LoRa.endPacket();
+}
+
+void sendLoRaData(String msg) {
+  Message = DeviceID + "/" + msg;
+  Serial.println(Message);
+  sendMessage(Message, Destination_Master);
+}
 
 void setup() {
   Serial.begin(115200);
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
+
+  // LoRa Setup
+  LoRa.setPins(ss, rst, dio0);
+  if (!LoRa.begin(433E6)) {
+    Serial.println("LoRa init failed!");
+    while (1);
+  }
+  Serial.println("LoRa init succeeded.");
 }
 
 long readUltrasonic() {
@@ -14,15 +49,12 @@ long readUltrasonic() {
   digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
-
-  long duration = pulseIn(ECHO_PIN, HIGH, 30000); // 30ms timeout
-  return duration;
+  return pulseIn(ECHO_PIN, HIGH, 30000);
 }
 
 float getDistanceCM() {
   long duration = readUltrasonic();
-  float distance = duration * 0.0343 / 2;
-  return distance;
+  return duration * 0.0343 / 2.0;
 }
 
 float calculateFillPercentage(float distanceCM) {
@@ -32,25 +64,20 @@ float calculateFillPercentage(float distanceCM) {
 }
 
 String getStatus(float distanceCM) {
-  if (distanceCM < 10.0) {
-    return "Urgent Cleaning";
-  } else if (distanceCM < 15.0) {
-    return "Needs Cleaning";
-  } else if (distanceCM < 20.0) {
-    return "Moderate";
-  } else {
-    return "Bin Mostly Empty";
-  }
+  if (distanceCM < 10.0) return "Full";
+  else if (distanceCM < 15.0) return "High";
+  else if (distanceCM < 20.0) return "Mid";
+  else return "Empty";
 }
-
 
 void loop() {
   float distance = getDistanceCM();
-  float fillPercent = calculateFillPercentage(distance);  // Still valid if you want to log % too
-  String status = getStatus(distance);  // Now uses distance instead of fill %
-  Serial.print("% | Status: ");
+  float fillPercent = calculateFillPercentage(distance);
+
+  String status = getStatus(distance);
+    Serial.println(distance);
+    Serial.println(fillPercent);
   Serial.println(status);
-
-  delay(2000);
+  sendLoRaData(status);
+  delay(1000);
 }
-

@@ -97,6 +97,6 @@ We welcome contributions to make this system even smarter! Fork the repo, create
 ---
 
 ## 📬 Contact
-Have questions or suggestions? or connect with us on vimalkanth2002@gmail.com
+Have questions or suggestions? or connect with me on vimalkanth2002@gmail.com
 
 ---

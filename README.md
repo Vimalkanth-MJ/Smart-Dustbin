@@ -57,7 +57,7 @@ The initial version of the Smart Waste Monitoring System is fully implemented an
 - **`Master.ino`**: Handles data aggregation from dustbin nodes and OLED display updates.
 - **`Dustbin.ino`**: Manages sensor readings, LoRa communication, and power optimization for each dustbin node.
 
-📽️ **Demo Video**: [Watch Version 1.0 in Action](#) (replace with your video link).
+📽️ **Demo Video**: [Watch Version 1.0 in Action](https://youtu.be/JRQu1BGah7s)
 
 ---
 

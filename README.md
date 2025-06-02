@@ -37,7 +37,7 @@ Smart-Waste-Monitoring-System/
 ## 🛠️ Version 1.0: Current Status
 
 🎉 **Version 1.0 is Complete!**  
-The initial version of the Smart Waste Monitoring System is fully implemented and tested in a controlled environment. Check out the [Version 1.0 Demo Video](#) (link to be updated with your video) to see it in action!
+The initial version of the Smart Waste Monitoring System is fully implemented and tested in a controlled environment. Check out the [Version 1.0 Demo Video](https://youtu.be/JRQu1BGah7s) to see it in action!
 
 ### Key Features of Version 1.0
 - **Waste Level Detection**: HC-SR04 ultrasonic sensors accurately measure bin fill levels.
@@ -46,12 +46,6 @@ The initial version of the Smart Waste Monitoring System is fully implemented an
 - **OLED Visualization**: The master node displays real-time bin statuses on an OLED screen.
 - **Energy Optimization**: Deep sleep mode and IR-triggered wake-ups minimize power consumption.
 
-### How It Works
-1. **Node Initialization**: Dustbin nodes remain in deep sleep, waking up via IR proximity sensors or periodic intervals.
-2. **Waste Detection**: Ultrasonic sensors measure waste levels, processed with a moving average filter for accuracy.
-3. **Data Transmission**: Data is sent to the master node via LoRa in a star topology.
-4. **Status Display**: The master node updates the OLED display with bin fill statuses.
-5. **Power Management**: Nodes return to deep sleep after transmission to conserve energy.
 
 ### Source Code
 - **`Master.ino`**: Handles data aggregation from dustbin nodes and OLED display updates.
